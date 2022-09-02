@@ -1,0 +1,22 @@
+nohup: ввод игнорируется
+[I 20:50:41.241 NotebookApp] Обслуживание блокнотов из локального каталога: /home/leginpc/reps/HeteroLayerDistillation
+[I 20:50:41.241 NotebookApp] Jupyter Notebook 6.4.8 is running at:
+[I 20:50:41.241 NotebookApp] http://leginpc:8888/
+[I 20:50:41.241 NotebookApp] Используйте Control-C, для остановки этого сервера и выключения всех ядер (дважды, чтобы пропустить подтверждение).
+[W 20:51:24.003 NotebookApp] Notebook notebooks/mutual_information_distillation_grad_oleg.ipynb is not trusted
+[I 20:51:24.393 NotebookApp] Kernel started: 164b78c4-653c-4217-9136-6299a9d6a2b1, name: python3
+[I 20:53:24.136 NotebookApp] Kernel interrupted: 164b78c4-653c-4217-9136-6299a9d6a2b1
+[I 20:53:24.365 NotebookApp] Saving file at /notebooks/mutual_information_distillation_grad_oleg.ipynb
+[W 20:53:24.366 NotebookApp] Notebook notebooks/mutual_information_distillation_grad_oleg.ipynb is not trusted
+[I 20:55:24.365 NotebookApp] Saving file at /notebooks/mutual_information_distillation_grad_oleg.ipynb
+[W 20:55:24.365 NotebookApp] Notebook notebooks/mutual_information_distillation_grad_oleg.ipynb is not trusted
+[I 20:57:24.394 NotebookApp] Saving file at /notebooks/mutual_information_distillation_grad_oleg.ipynb
+[W 20:57:24.395 NotebookApp] Notebook notebooks/mutual_information_distillation_grad_oleg.ipynb is not trusted
+[I 20:58:54.478 NotebookApp] Saving file at /notebooks/mutual_information_distillation_grad_oleg.ipynb
+[W 20:58:54.479 NotebookApp] Notebook notebooks/mutual_information_distillation_grad_oleg.ipynb is not trusted
+[I 20:59:24.364 NotebookApp] Saving file at /notebooks/mutual_information_distillation_grad_oleg.ipynb
+[W 20:59:24.364 NotebookApp] Notebook notebooks/mutual_information_distillation_grad_oleg.ipynb is not trusted
+[I 21:01:24.443 NotebookApp] Saving file at /notebooks/mutual_information_distillation_grad_oleg.ipynb
+[W 21:01:24.444 NotebookApp] Notebook notebooks/mutual_information_distillation_grad_oleg.ipynb is not trusted
+[I 21:01:36.296 NotebookApp] Starting buffering for 164b78c4-653c-4217-9136-6299a9d6a2b1:6012ef01c2ef47929cecbc20d5dec6f6
+[I 21:01:37.832 NotebookApp] Kernel restarted: 164b78c4-653c-4217-9136-6299a9d6a2b1

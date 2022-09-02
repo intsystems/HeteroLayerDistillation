@@ -1,0 +1,228 @@
+% This is samplepaper.tex, a sample chapter demonstrating the
+% LLNCS macro package for Springer Computer Science proceedings;
+% Version 2.20 of 2017/10/04
+%
+\documentclass[runningheads]{llncs}
+\usepackage{graphicx}
+\input{math_symbols}
+\usepackage{amsfonts}
+%\usepackage{algpseudocode}
+\usepackage{subcaption}
+\usepackage{amsmath}
+%\usepackage{algorithm2e}
+\usepackage[all,cmtip]{xy}
+% \usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+%\usepackage{amsthm}
+\usepackage{tabularx}
+\usepackage{enumerate}
+
+\DeclareMathOperator*{\argmin}{arg\,min}
+% Used for displaying a sample figure. If possible, figure files should
+% be included in EPS format.
+%
+% If you use the hyperref package, please uncomment the following line
+% to display URLs in blue roman font according to Springer's eBook style:
+% \renewcommand\UrlFont{\color{blue}\rmfamily}
+
+\begin{document}
+%
+\title{Knowledge distillation on heterogeneous models}%\thanks{Supported by organization x.}}
+%
+\titlerunning{Knowledge distillation on heterogeneous models}
+% If the paper title is too long for the running head, you can set
+% an abbreviated paper title here
+%
+\author{M.~Gorpinich\inst{1}
+% \orcidID{0000-1111-2222-3333} 
+%\and
+O.~Bakhteev\inst{1,2}
+% \orcidID{1111-2222-3333-4444} 
+%\and
+V.~Strijov\inst{1,2}
+% \orcidID{2222--3333-4444-5555}
+}
+%
+\authorrunning{M.~Gorpinich et al.}
+% First names are abbreviated in the running head.
+% If there are more than two authors, 'et al.' is used.
+%
+% \email
+%     {gorpinich4@gmail.com; bakhteev@phystech.edu;  strijov@ccas.ru}
+\institute{Moscow Institute of Physics and Technology \and Dorodnicyn Computing Center RAS}
+% \institute{Princeton University, Princeton NJ 08544, USA \and
+% Springer Heidelberg, Tiergartenstr. 17, 69121 Heidelberg, Germany
+% \email{lncs@springer.com}\\
+% \url{http://www.springer.com/gp/computer-science/lncs} \and
+% ABC Institute, Rupert-Karls-University Heidelberg, Heidelberg, Germany\\
+% \email{\{abc,lncs\}@uni-heidelberg.de}}
+%
+\maketitle              % typeset the header of the contribution
+%
+\begin{abstract}
+
+This paper investigates the deep learning knowledge distillation problem. Knowledge distillation is a model parameter optimization problem that allows transferring information contained in the model with high complexity, called teacher, to the simpler one, called student. In this paper we propose a cross-layer distillation method that can be applied to significantly heterogeneous models. The variational inference is applied to derive the loss function for metaparameter optimization. Metaparameters are the coefficients of the losses between each pair of layers. The proposed approach is evaluated in the computational experiment on the CIFAR-10 dataset.
+
+\keywords{Machine learning \and Knowledge distillation \and Heterogeneous models.}
+\end{abstract}
+%
+%
+%
+% \section{First Section}
+% \subsection{A Subsection Sample}
+\section{Introduction}
+
+The paper investigates knowledge distillation problem on deep neural networks. Knowledge distillation or knowledge transfer is a technique that allows to transfer knowledge from a teacher model to a student model that is simpler comparing to the teacher model.
+
+Many knowledge distillation methods require similarity of the architectures of the teacher and student model. An approach proposed by Hinton et al. \cite{journals/corr/HintonVD15} matches logits of the last softmax layer. There are approaches that also match intermediate layers of deep neural networks. In \cite{conf/cvpr/AhnHDLD19} the information-theoretic approach is used. In \cite{conf/cvpr/PassalisTT20} the authors model information flows in the teacher network and teach student network to mimic them. In \cite{journals/corr/RomeroBKCGB14} intermediate-layer hints are used to guide the student network training process. In \cite{journals/corr/ZagoruykoK16a} the same problem is solved using attention transfer. In \cite{conf/iccv/TungM19} the new type of loss function is used that preserves the similarity between different activation functions. In \cite{journals/corr/abs-1902-03393} the problem of heterogeneous models is solved using intermediate models called teacher assistant models. In \cite{journals/corr/abs-2012-03236} the feature map distillation with attention is used.
+
+In this paper we propose an approach that allows to achieve high performance of a model trained with knowledge distillation even when the architectures of the teacher and student model are significantly heterogeneous.
+
+Contributions of this paper are as follows:
+
+\begin{itemize}
+    \item 
+\end{itemize}
+
+\section{Problem statement}
+
+The knowledge distillation problem is under consideration. In this paper we apply it to solve classification problem but it can be applied to other machine learning problems.
+
+Given a dataset for K-classification problem:
+
+$$\fD = \{(\bx_i, y_i)\}_{i=1}^{m},\; \bx_i \in \bbR^n,\; y_i \in \bbY = \{1, \dots, K\},$$
+
+% Split the dataset $\fD$: $\fD = \fD_\text{train} \sqcup \fD_\text{val}.$ The subset $\fD_\text{train}$ is used for model parameter optimization, the subset $\fD_\text{val}$ for metaparameter optimization.
+
+Given a teacher model $\bff$, which was trained on the dataset $\fD_\text{train}$. Optimize a student model $\bg$ to transfer information obtained from  the teacher.
+
+Lets consider two significantly heterogeneous networks, 
+$T$ is a number of layers in a teacher network, $S$ is a number of layers in a student network. Consider $T \cdot S$ pairs of layers $\{(t_i, s_j)\}_{i, j=1}^{T \cdot S}.$
+
+Solve the bi-level optimization problem:
+
+% Construct the loss function $\cL$ for solving bi-level optimization problem:
+
+% $$\cL = \cL_{\text{task}} + {\sum_{i, j=1}^{T, S}\lambda_{i, j}D(h^{t}_{i}, h^{s}_{j})},$$
+
+$$
+\hat{\boldsymbol{\lambda}} = \arg\min\limits_{\boldsymbol{\lambda} \in \mathbb{R}^{T \circ S}} \cL_{\text{task}}(\hat{\mathbf{w}}, \boldsymbol{\lambda}) + {\sum_{i, j=1}^{T, S}\lambda_{i, j}I(h^{t}_{i}, h^{s}_{j})},
+$$ 
+$$
+\hat{\mathbf{w}} = \arg\min\limits_{\mathbf{w} \in \mathbb{R}^m} \cL_{\text{task}}(\hat{\mathbf{w}}, \boldsymbol{\lambda}),$$
+
+\noindent
+where $\cL_{\text{task}}$ is a cross-entropy loss for classification task, $h^{t}_{i}$ and $h^{s}_{j}$ are activations of the $i$-th layer of the teacher network and the $j$-th layer of the student network, $I(h^{t}_{i}, h^{s}_{j})$ is the mutual information, $\lambda_{i, j}$ is a hyperparameter, $\sum_{i, j = 1}^{T, S}\lambda_{i, j} = 1$.
+
+
+
+\section{Experiments}
+
+
+
+\section{Conclusion}
+
+
+% Please note that the first paragraph of a section or subsection is
+% not indented. The first paragraph that follows a table, figure,
+% equation etc. does not need an indent, either.
+
+% Subsequent paragraphs, however, are indented.
+
+% \subsubsection{Sample Heading (Third Level)} Only two levels of
+% headings should be numbered. Lower level headings remain unnumbered;
+% they are formatted as run-in headings.
+
+% \paragraph{Sample Heading (Fourth Level)}
+% The contribution should contain no more than four levels of
+% headings. Table~\ref{tab1} gives a summary of all heading levels.
+
+% \begin{table}
+% \caption{Table captions should be placed above the
+% tables.}\label{tab1}
+% \begin{tabular}{|l|l|l|}
+% \hline
+% Heading level &  Example & Font size and style\\
+% \hline
+% Title (centered) &  {\Large\bfseries Lecture Notes} & 14 point, bold\\
+% 1st-level heading &  {\large\bfseries 1 Introduction} & 12 point, bold\\
+% 2nd-level heading & {\bfseries 2.1 Printing Area} & 10 point, bold\\
+% 3rd-level heading & {\bfseries Run-in Heading in Bold.} Text follows & 10 point, bold\\
+% 4th-level heading & {\itshape Lowest Level Heading.} Text follows & 10 point, italic\\
+% \hline
+% \end{tabular}
+% \end{table}
+
+
+% \noindent Displayed equations are centered and set on a separate
+% line.
+% \begin{equation}
+% x + y = z
+% \end{equation}
+% Please try to avoid rasterized images for line-art diagrams and
+% schemas. Whenever possible, use vector graphics instead (see
+% Fig.~\ref{fig1}).
+
+% \begin{figure}
+% \includegraphics[width=\textwidth]{fig1.eps}
+% \caption{A figure caption is always placed below the illustration.
+% Please note that short captions are centered, while long ones are
+% justified by the macro package automatically.} \label{fig1}
+% \end{figure}
+
+% \begin{theorem}
+% This is a sample theorem. The run-in heading is set in bold, while
+% the following text appears in italics. Definitions, lemmas,
+% propositions, and corollaries are styled the same way.
+% \end{theorem}
+%
+% the environments 'definition', 'lemma', 'proposition', 'corollary',
+% 'remark', and 'example' are defined in the LLNCS documentclass as well.
+%
+% \begin{proof}
+% Proofs, examples, and remarks have the initial word in italics,
+% while the following text appears in normal font.
+% \end{proof}
+% For citations of references, we prefer the use of square brackets
+% and consecutive numbers. Citations using labels or the author/year
+% convention are also acceptable. The following bibliography provides
+% a sample reference list with entries for journal
+% articles~\cite{ref_article1}, an LNCS chapter~\cite{ref_lncs1}, a
+% book~\cite{ref_book1}, proceedings without editors~\cite{ref_proc1},
+% and a homepage~\cite{ref_url1}. Multiple citations are grouped
+% \cite{ref_article1,ref_lncs1,ref_book1},
+% \cite{ref_article1,ref_book1,ref_proc1,ref_url1}.
+%
+% ---- Bibliography ----
+%
+% BibTeX users should specify bibliography style 'splncs04'.
+% References will then be sorted and formatted in the correct style.
+%
+
+%
+% \begin{thebibliography}
+\bibliographystyle{splncs04.bst}
+\nocite{*}
+\bibliography{bibliography.bib}
+% \bibitem{ref_article1}
+% Author, F.: Article title. Journal \textbf{2}(5), 99--110 (2016)
+
+% \bibitem{ref_lncs1}
+% Author, F., Author, S.: Title of a proceedings paper. In: Editor,
+% F., Editor, S. (eds.) CONFERENCE 2016, LNCS, vol. 9999, pp. 1--13.
+% Springer, Heidelberg (2016). \doi{10.10007/1234567890}
+
+% \bibitem{ref_book1}
+% Author, F., Author, S., Author, T.: Book title. 2nd edn. Publisher,
+% Location (1999)
+
+% \bibitem{ref_proc1}
+% Author, A.-B.: Contribution title. In: 9th International Proceedings
+% on Proceedings, pp. 1--2. Publisher, Location (2010)
+
+% \bibitem{ref_url1}
+% LNCS Homepage, \url{http://www.springer.com/lncs}. Last accessed 4
+% Oct 2017
+% \end{thebibliography}
+\end{document}
